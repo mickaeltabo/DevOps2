@@ -1,57 +1,34 @@
 pipeline {
     agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building...'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-            }
-        }
-    }
-}
-
-pipeline {
-    agent any
     environment {
         DOCKER_IMAGE = 'dockercrypto'
-        // Remplace 'nom_de_ton_image' par le nom que tu veux donner à ton image Docker
     }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
-                // Ceci récupère le code source de la branche spécifiée dans la configuration du job Jenkins
             }
         }
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
+                echo 'Building...'
                 script {
                     docker.build(env.DOCKER_IMAGE)
                 }
             }
         }
-        stage('Test Docker Image') {
+        stage('Test') {
             steps {
+                echo 'Testing...'
                 script {
                     docker.image(env.DOCKER_IMAGE).run()
-                    // Ajoute ici les commandes nécessaires pour exécuter les tests sur ton application si nécessaire
                 }
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Ici, tu ajouteras plus tard les étapes pour déployer ton application.'
-                // Les étapes de déploiement réelles seront ajoutées une fois que tu auras ton infrastructure AWS et Terraform prêtes.
+                echo 'Deploying...'
+                // Ici, tu ajouteras plus tard les étapes pour déployer ton application.
             }
         }
     }
