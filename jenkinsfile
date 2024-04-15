@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'dockercrypto'
+        // Ajoute ici les autres variables d'environnement si nécessaire
     }
     stages {
         stage('Checkout') {
@@ -25,11 +26,43 @@ pipeline {
                 }
             }
         }
+        // Ajout de la nouvelle étape pour initialiser Terraform
+        stage('Terraform Init') {
+            steps {
+                script {
+                    // Assure-toi d'avoir installé le plugin Terraform pour Jenkins
+                    // et que ton répertoire Terraform est accessible
+                    terraform('init')
+                }
+            }
+        }
+        // Ajout de la nouvelle étape pour planifier les changements avec Terraform
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    terraform('plan')
+                }
+            }
+        }
+        // Ajout de la nouvelle étape pour appliquer les changements avec Terraform
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    // Ajoute une interaction utilisateur ou des conditions pour sécuriser cette étape
+                    terraform('apply')
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
                 // Ici, tu ajouteras plus tard les étapes pour déployer ton application.
             }
+        }
+    }
+    post {
+        always {
+            // Ajoute des étapes pour le nettoyage si nécessaire
         }
     }
 }
